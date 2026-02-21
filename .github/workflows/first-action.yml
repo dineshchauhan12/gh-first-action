@@ -12,7 +12,7 @@ jobs:
          echo "bye"
 
   second-job:
-     need: first-job
+     needs: first-job
      runs-on: ubuntu-latest
      steps:
       - name: print greeting
