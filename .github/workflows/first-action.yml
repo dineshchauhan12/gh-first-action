@@ -10,4 +10,15 @@ jobs:
         run: |
          echo "Done"
          echo "bye"
-        
+  jobs:
+
+   need: First workflow
+    second:
+      runs-on: ubuntu-latest
+      steps:
+      - name: print greeting
+        run: echo "Hello worlds"
+      - name: print goodbye
+        run: |
+         echo "Done"
+         echo "bye"
