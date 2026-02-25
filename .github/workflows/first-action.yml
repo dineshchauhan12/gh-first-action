@@ -19,5 +19,6 @@ jobs:
         run: echo "Hello worlds"
       - name: print goodbye
         run: |
-         echo "Second-job-Bye"
          echo "test"
+         echo "test"
+
