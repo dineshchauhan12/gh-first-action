@@ -20,4 +20,4 @@ jobs:
       - name: print goodbye
         run: |
          echo "Second-job-Bye"
-         echo "Second-bye"
+         echo "test"
