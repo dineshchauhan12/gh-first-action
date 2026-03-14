@@ -1,0 +1,48 @@
+name: Script automation
+
+on: 
+ workflow_dispatch:
+ schedule:
+ - cron: '30 6 * * *'
+permissions:
+ id-token: write
+
+jobs:
+ Run_Qualification:
+  name: Run Shell script for system Health check
+  runs-on: 
+    group: cicdhub-runners
+    labels: self-hosted-amd64
+  steps:
+   - name: checkout the repository
+     uses: action/checkout@v3
+   - name: Install packages
+     run: |
+       sudo apt-get update
+       sudo apt-get install -y openssh-server
+   - name: configure AWS credentials
+     uses: aws-actions/configure-aws-credentials@v1
+     with:
+       aws-access-key-id: ${{ secrets.AWS_access_KEY_ID }}
+       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+       aws-region: ap-south-1
+
+   - name: check EC2 connection
+     run: |
+       ssh -i key.pem ec2-user@35.154.240.64 <<'ENDSSH'
+       pwd
+       cd /home/ec2-user/infra_sanity
+       echo "starting shell scripts"
+       sh test.sh
+       sleep 120
+       formatted_result=$(car /home/ec2-user/infra_sanity/script_system.log)
+       echo $formatted_result
+       ls -lrt
+       ENDSSH
+
+   - name: script output
+     run: |
+       scp -i key.pem -o "StrictHostKeyChecking no" ec2-user@i-0a2bb6a4481f65303:/home/ec2-user/infra_sanity/system_health_check.log
+       pwd
+       ls -lrt
+       cat system_health_check.log
