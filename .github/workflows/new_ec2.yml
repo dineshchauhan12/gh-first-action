@@ -9,12 +9,10 @@ permissions:
   id-token: write
 
 jobs:
-  Run_Qualification:
+  Connect_EC2:
     name: Run Shell script for system Health check
-    runs-on:
-      group: cicdhub-runners
-      labels: self-hosted-amd64
-
+    runs-on: ubuntu-latest
+      
     steps:
 
       - name: CheckOut the repository
