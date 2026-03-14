@@ -64,25 +64,3 @@ jobs:
            echo "</table></body></html>"
            echo EOF
           } >> "$GITHUB_OUTPUT"
-
-   - name: Store Output
-     env:
-        email_ouput: ${{ steps.store-date.outputs.report_output_var1 }}
-        run: echo "The email body is $email_output"
-        shell: bash
-
-   - name: send success email:
-      env:
-        email_ouput: ${{ steps.store-date.outputs.report_output_var1 }}
-      uses: email/action-send-email@v2
-      with: 
-        with:
-           server_address: ${{ secrets.SMTP_SERVER }}
-           server_port: ${{ secrets.SMTP_PORT }}
-           username: ${{ secrets.SMTP_USERNAME }}
-           password: ${{ secrets.SMTP_PASSWORD }}
-           subject: Application Health Status
-           to: ${{ secrets.EMAIL_TO }}
-           from: DevOps Monitor
-           html_body: file://mail.html
- 
