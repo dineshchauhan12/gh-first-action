@@ -21,24 +21,29 @@ jobs:
        sudo apt-get update
        sudo apt-get install -y openssh-server
    - name: configure AWS credentials
-     uses: aws-actions/configure-aws-credentials@v1
+     uses: ppleboy/ssh-action@v1.0.3
      with:
        aws-access-key-id: ${{ secrets.AWS_access_KEY_ID }}
        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
        aws-region: ap-south-1
 
+   - name: Create SSH key
+     run: |
+      echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
+      chmod 400 key.pem
+
    - name: check EC2 connection
      run: |
-       ssh -i key.pem ec2-user@35.154.240.64 <<'ENDSSH'
-       pwd
-       cd /home/ec2-user/infra_sanity
-       echo "starting shell scripts"
-       sh test.sh
-       sleep 120
-       formatted_result=$(car /home/ec2-user/infra_sanity/script_system.log)
-       echo $formatted_result
-       ls -lrt
-       ENDSSH
+      ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@35.154.240.64 << 'ENDSSH'
+      pwd
+      cd /home/ec2-user/infra_sanity
+      echo "starting shell scripts"
+      sh test.sh
+      sleep 120
+      formatted_result=$(cat /home/ec2-user/infra_sanity/script_system.log)
+      echo $formatted_result
+      ls -lrt
+      ENDSSH
 
    - name: script output
      run: |
