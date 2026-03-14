@@ -36,7 +36,7 @@ jobs:
 
       - name: Check EC2 connection
         run: |
-          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@35.154.240.64 <<EOF
+          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@3.109.62.23 <<EOF
           pwd
           cd /home/ec2-user/infra_sanity
           echo "starting shell script"
