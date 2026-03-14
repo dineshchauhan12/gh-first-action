@@ -11,7 +11,7 @@ jobs:
  Run_Qualification:
   name: Run Shell script for system Health check
   runs-on: 
-    group:cicdhub-runners
+    group: cicdhub-runners
     labels: self-hosted-amd64
   steps:
    - name: checkout the repositry
@@ -26,8 +26,8 @@ jobs:
        role-name: Dinesh_Learning
        account-id: 516640166316
        ssh-key: ${{ secrets.ec2-connect }}
-    - name: check EC2 connection
-      run: |
+   - name: check EC2 connection
+     run: |
        ssh -i key.pem -o "stricthostkeychecking no" ec2-user@i-0a2bb6a4481f65303 <<'ENDSSH'
        pwd
        cd /home/ec2-user/infra_sanity
@@ -39,14 +39,14 @@ jobs:
        ls -lrt
        ENDSSH
 
-    - name: script output
+   - name: script output
      run: |
        scp -i key.pem -o "StrictHostKeyChecking no" ec2-user@i-0a2bb6a4481f65303:/home/ec2-user/infra_sanity/system_health_check.log
        pwd
        ls -lrt
        cat system_health_check.log
 
-    - name: Store multiline
+   - name: Store multiline
      id: store-date
      run: |
        {
@@ -65,13 +65,13 @@ jobs:
            echo EOF
           } >> "$GITHUB_OUTPUT"
 
-    - name: Store Output
-      env:
+   - name: Store Output
+     env:
         email_ouput: ${{ steps.store-date.outputs.report_output_var1 }}
-      run: echo "The email body is $email_output"
-      shell: bash
+        run: echo "The email body is $email_output"
+        shell: bash
 
-    - name: send success email:
+   - name: send success email:
       env:
         email_ouput: ${{ steps.store-date.outputs.report_output_var1 }}
       uses: email/action-send-email@v2
@@ -81,7 +81,8 @@ jobs:
            server_port: ${{ secrets.SMTP_PORT }}
            username: ${{ secrets.SMTP_USERNAME }}
            password: ${{ secrets.SMTP_PASSWORD }}
-          subject: Application Health Status
-          to: ${{ secrets.EMAIL_TO }}
-          from: DevOps Monitor
-          html_body: file://mail.html
+           subject: Application Health Status
+           to: ${{ secrets.EMAIL_TO }}
+           from: DevOps Monitor
+           html_body: file://mail.html
+ 
