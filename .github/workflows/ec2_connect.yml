@@ -44,10 +44,3 @@ jobs:
       echo $formatted_result
       ls -lrt
       ENDSSH
-
-   - name: script output
-     run: |
-       scp -i key.pem -o "StrictHostKeyChecking no" ec2-user@i-0a2bb6a4481f65303:/home/ec2-user/infra_sanity/system_health_check.log
-       pwd
-       ls -lrt
-       cat system_health_check.log
