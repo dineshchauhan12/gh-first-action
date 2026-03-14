@@ -15,17 +15,18 @@ jobs:
     labels: self-hosted-amd64
   steps:
    - name: checkout the repositry
-     uses: action/checkout@v3
+     uses: action/checkout@v1
    - name: Install packages
      run: |
        sudo apt-get update
        sudo apt-get install -y openssh-server
-   - name: configure ssh over ssm
-     uses: automation/action-ssh-over-ssm-config@1
+   - name: configure aws credentials
+     uses: aws-action/configure-aws-credentials@v1
      with:
-       role-name: Dinesh_Learning
-       account-id: 516640166316
-       ssh-key: ${{ secrets.ec2-connect }}
+       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+       aws-region: ap-south-1
+
    - name: check EC2 connection
      run: |
        ssh -i key.pem -o "stricthostkeychecking no" ec2-user@i-0a2bb6a4481f65303 <<'ENDSSH'
