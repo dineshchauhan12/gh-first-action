@@ -26,8 +26,8 @@ jobs:
        role-name: Dinesh_Learning
        account-id: 516640166316
        ssh-key: ${{ secrets.ec2-connect }}
-    -name: check EC2 connection
-     run: |
+    - name: check EC2 connection
+      run: |
        ssh -i key.pem -o "stricthostkeychecking no" ec2-user@i-0a2bb6a4481f65303 <<'ENDSSH'
        pwd
        cd /home/ec2-user/infra_sanity
@@ -39,14 +39,14 @@ jobs:
        ls -lrt
        ENDSSH
 
-    -name: script output
+    - name: script output
      run: |
        scp -i key.pem -o "StrictHostKeyChecking no" ec2-user@i-0a2bb6a4481f65303:/home/ec2-user/infra_sanity/system_health_check.log
        pwd
        ls -lrt
        cat system_health_check.log
 
-    -name: Store multiline
+    - name: Store multiline
      id: store-date
      run: |
        {
