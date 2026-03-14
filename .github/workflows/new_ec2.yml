@@ -45,7 +45,7 @@ jobs:
           formatted_result=\$(cat /home/ec2-user/infra_sanity/script_system.log)
           echo \$formatted_result
           ls -lrt
-          ENDSSH
+          EOF
       - name: Store multiline
         id: store-date
         run: |
