@@ -52,3 +52,11 @@ jobs:
          pwd
          ls -lrt
          cat system_health_check.html
+      - name: Store multiline HTML output
+        id: store-html
+        run: |
+          {
+          echo 'report_html<<EOF'
+          cat system_health_check.html
+          echo 'EOF'
+           } >> $GITHUB_OUTPUT
