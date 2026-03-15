@@ -67,7 +67,7 @@ jobs:
             else
               echo "<tr><td>$component</td><td style='color:green'>$status</td><td>$details</td></tr>"
            fi
-            done < system_health_check.log
+            done < system_health_check.html
           echo "</table></body></html>"
           echo "EOF"
             } >> $GITHUB_OUTPUT
