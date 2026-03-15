@@ -56,7 +56,7 @@ jobs:
         id: store-html
         run: |
           {
-           echo 'report_output_var1<<EOF'
+           echo 'report_html<<EOF'
            echo "<html><body><h2>Test Report</h2>"
            echo "<table border='1' cellpadding='5' cellspacing='0'>"
            echo "<tr><th>Component</th><th>Status</th><th>Version/Details</th></tr>"
