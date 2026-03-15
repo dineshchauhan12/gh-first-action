@@ -60,3 +60,15 @@ jobs:
           cat system_health_check.html
           echo 'EOF'
            } >> $GITHUB_OUTPUT
+
+      - name: Send HTML Report Email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: EC2 System Health Report
+          to: dinesh.delhi08@gmail.com
+          from: GitHub Actions
+          html_body: ${{ steps.store-html.outputs.report_html }}
