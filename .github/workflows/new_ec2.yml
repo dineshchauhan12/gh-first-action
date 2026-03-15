@@ -48,7 +48,7 @@ jobs:
           EOF
       - name: script output
         run: |
-         scp -o StrictHostKeyChecking=no -i key.pem ec2-user@3.110.157.243:/home/ec2-user/infra_sanity/system_health_check.html
+         scp -o StrictHostKeyChecking=no -i key.pem ec2-user@3.110.157.243:/home/ec2-user/infra_sanity/system_health_check.html .
          pwd
          ls -lrt
          cat system_health_check.html
