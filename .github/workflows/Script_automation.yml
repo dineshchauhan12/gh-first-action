@@ -1,0 +1,86 @@
+name: Script automation
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 6 * * *'
+
+permissions:
+  id-token: write
+
+jobs:
+  Connect_EC2:
+    name: Run Shell script for system Health check
+    runs-on: ubuntu-latest
+      
+    steps:
+
+      - name: CheckOut the repository
+        uses: actions/checkout@v3
+
+      - name: Install packages
+        run: |
+          sudo apt-get update
+
+      - name: Login AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Create SSH key
+        run: |
+          echo "${{ secrets.EC2_HOST_KEY }}" | tr -d '\r' > key.pem
+          chmod 400 key.pem
+
+      - name: Check EC2 connection
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@3.110.157.243 <<EOF
+          pwd
+          cd /home/ec2-user/infra_sanity
+          echo "starting shell script"
+          sh test.sh
+          sleep 120
+          formatted_result=\$(cat /home/ec2-user/infra_sanity/script_system.html)
+          echo \$formatted_result
+          ls -lrt
+          EOF
+      - name: script output
+        run: |
+         scp -o StrictHostKeyChecking=no -i key.pem ec2-user@3.110.157.243:/home/ec2-user/infra_sanity/system_health_check.html .
+         pwd
+         ls -lrt
+         cat system_health_check.html
+      - name: Store multiline HTML output
+        id: store-html
+        run: |
+          {
+           echo 'report_html<<EOF'
+           echo "<html><body><h2>Test Report</h2>"
+           echo "<table border='1' cellpadding='5' cellspacing='0'>"
+           echo "<tr><th>Component</th><th>Status</th><th>Version/Details</th></tr>"
+
+           while IFS="|" read -r component status details; do
+            if [[ "$status" == *"Not Installed"* || "$status" == *"Not Connected"* ]]; then
+             echo "<tr><td>$component</td><td style='color:red'>$status</td><td>$details</td></tr>"
+            else
+              echo "<tr><td>$component</td><td style='color:green'>$status</td><td>$details</td></tr>"
+           fi
+            done < system_health_check.html
+          echo "</table></body></html>"
+          echo "EOF"
+            } >> $GITHUB_OUTPUT
+
+      - name: Send HTML Report Email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: EC2 System Health Report
+          to: dinesh.delhi08@gmail.com
+          from: GitHub Actions
+          html_body: ${{ steps.store-html.outputs.report_html }}
+     
