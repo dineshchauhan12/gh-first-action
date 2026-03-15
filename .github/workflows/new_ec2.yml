@@ -42,7 +42,13 @@ jobs:
           echo "starting shell script"
           sh test.sh
           sleep 120
-          formatted_result=\$(cat /home/ec2-user/infra_sanity/script_system.log)
+          formatted_result=\$(cat /home/ec2-user/infra_sanity/script_system.html)
           echo \$formatted_result
           ls -lrt
           EOF
+      - name: script output
+        run: |
+         scp -i key.pem -o "StrictHostKeyChecking no" ec2-user@3.110.157.243:/home/ec2-user/infra_sanity/system_health_check.html
+         pwd
+         ls -lrt
+         cat system_health_check.html
