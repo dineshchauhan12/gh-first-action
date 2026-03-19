@@ -36,7 +36,7 @@ jobs:
 
       - name: Check EC2 connection
         run: |
-          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@3.110.157.243 <<EOF
+          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@13.234.238.3 <<EOF
           pwd
           cd /home/ec2-user/infra_sanity
           echo "starting shell script"
@@ -48,7 +48,7 @@ jobs:
           EOF
       - name: script output
         run: |
-         scp -o StrictHostKeyChecking=no -i key.pem ec2-user@3.110.157.243:/home/ec2-user/infra_sanity/system_health_check.html .
+         scp -o StrictHostKeyChecking=no -i key.pem ec2-user@13.234.238.3:/home/ec2-user/infra_sanity/system_health_check.html .
          pwd
          ls -lrt
          cat system_health_check.html
