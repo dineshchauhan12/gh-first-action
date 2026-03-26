@@ -17,6 +17,84 @@ jobs:
      steps:
       - name: print greeting
         run: echo "Hello worlds"
+        ==============================================================continue-on-error: continue-on-error: 
+last 24 hour failure
+failure alert or email
+
+select * from async_job where status not in  ('finished','running') and failure not like '% bad SQL%' order by 3 desc
+
+Workflows
+jobs
+Steps
+
+First step is to setup workflow in GitHub action
+
+under the workflow there can be multiple jobs
+
+under the jobs there can be multiple steps
+like download the code in first steps
+install the dependency in second steps
+run automated test in third steps
+
+Trigger and Events
+events will define when given workflow will be excuted
+like it define when it will be trigger like manual or it will trigger if any commit push on a certain branch.
+
+Jobs
+Runner (execution environment)
+contain one or more steps
+
+Multiple run jobs in parallel default or sequential
+
+
+Steps
+execute a shell script or an action
+can use custom or third party actions
+steps are executed in order
+can be conditionally 
+
+
+First workflow
+----------------
+
+it will create under repo/.GitHub/workflows/name.yml
+
+name: First workflow (This is workflow name)
+On: workflow_dispatch ( manually triggered this workflow)
+jobs:(what need to run) (under this can be multiple jobs)
+	first-job:(u can any name)
+	  runs-on: ubuntu-latest
+	    steps:(under this we need to list of task)
+             - name: (Steps name) print greeting
+		run:(commend should be executed) "hello work"
+	     - name: print goodbye
+		run: echo "Done Bye:
+
+
+
+Workflow Triggers
+push
+pull_request
+create
+fork
+issues
+issue_comment
+watch
+discussion
+many more
+
+workflow_dispatch- manually trigger workflow
+repository_dispatch- REST API request triggers workflow
+schedule- workflow is scheduled
+workflow_call- can be called by other workflows
+
+		
+
+
+
+
+
+        
       - name: print goodbye
         run: |
          echo "Second-job-Bye"
