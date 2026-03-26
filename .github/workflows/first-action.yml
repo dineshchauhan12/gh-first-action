@@ -22,14 +22,3 @@ jobs:
          echo "Second-job-Bye"
          echo "test in vscode"
          echo "new line added"
-
-uses: dawidd6/action-send-mail@v3
-with:
-    server_address: ${{ secrets.SMTP_SERVER }}
-    server_port: ${{ secrets.SMTP_PORT }}
-    username: ${{ secrets.SMTP_USERNAME }}
-    password: ${{ secrets.SMTP_PASSWORD }}
-    subject: Application Health Status
-    to: ${{ secrets.EMAIL_TO }}
-    from: DevOps Monitor
-    html_body: file://mail.html
